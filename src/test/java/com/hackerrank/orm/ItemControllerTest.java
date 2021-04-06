@@ -23,7 +23,7 @@ import com.hackerrank.orm.util.EntityGenerator;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class ItemControllerTEst {
+public class ItemControllerTest {
 
   @Autowired
   private TestRestTemplate testRestTemplate;
@@ -46,7 +46,6 @@ public class ItemControllerTEst {
     ResponseEntity<Item> response = testRestTemplate
         .getForEntity("/app/item/1", Item.class);
     Assert.assertEquals("Naveen", response.getBody().getItemLastModifiedByUser());
-
   }
 
   @Test
@@ -55,31 +54,25 @@ public class ItemControllerTEst {
         .getForObject("/app/item", Object[].class);
     List<Item> list = (List) Arrays.asList(forObject);
     Assert.assertEquals(2, list.size());
-
   }
 
   @Test
   public void deleteByItemId() {
     testRestTemplate
         .delete("/app/item/1", Item.class);
-
     Object[] forObject = testRestTemplate
         .getForObject("/app/item", Object[].class);
     List<Item> list = (List) Arrays.asList(forObject);
-    Assert.assertEquals(1, list.size());
 
+    Assert.assertEquals(1, list.size());
   }
 
   @Test
   public void deleteAllItems() {
     testRestTemplate
         .delete("/app/item", Item.class);
-
-    Object[] forObject = testRestTemplate
-        .getForObject("/app/item", Object[].class);
-    List<Item> list = (List) Arrays.asList(forObject);
-    Assert.assertEquals(0, list.size());
-
+    List<Item> allItems = itemService.findAllItems();
+    Assert.assertEquals(0, allItems.size());
   }
 
 
