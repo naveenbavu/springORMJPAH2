@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -52,6 +53,15 @@ public class ItemController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item Not Found",
           new Exception("Item not found"));
     }
+  }
+
+  //2. update PUT
+  @PatchMapping(value = "/{itemId}")
+  public ResponseEntity<Item> patchItemDetails(@PathVariable int itemId, @RequestBody Item item) {
+    Item itemRes =   itemService.findItemByItemId(itemId).get();
+    itemRes.setItemEnteredByUser(item.getItemEnteredByUser());
+    itemService.saveItem(itemRes);
+    return new ResponseEntity(item, HttpStatus.OK);
   }
 
   //3. delete by itemId DELETE
